@@ -278,6 +278,12 @@ end
 
 ---@return {width:number, height:number}
 function D:size()
+  if not vim.api.nvim_win_is_valid(self.win) then
+    self.win = vim.fn.bufwinid(self.buf)
+  end
+  if not vim.api.nvim_win_is_valid(self.win) then
+    return self._size or { width = 0, height = 0 }
+  end
   return {
     width = vim.api.nvim_win_get_width(self.win),
     height = vim.api.nvim_win_get_height(self.win) + (vim.o.laststatus >= 2 and 1 or 0),
